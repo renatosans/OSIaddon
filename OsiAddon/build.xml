@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project name="OsiAddon" default="main">
+    <property environment="env" />
+    <property name="compiler" value="${env.TARGET_FRAMEWORK}/csc.exe" />
+    <property name="exeDirectory" value="${env.CURRENT_DIR}/Build/Program" />
+    <property name="addonDirectory" value="${env.CURRENT_DIR}/Build/Addon" />
+    <property name="references" value="/r:MySql.Data.dll /r:Interop.SAPbouiCOM.dll /r:Interop.SAPbobsCOM.dll" />
+    <property name="resources" value="/resource:MySql.Data.dll /resource:Interop.SAPbouiCOM.dll /resource:Interop.SAPbobsCOM.dll" />
+
+    <target name="main">
+        <!-- Prepara os recursos para embarca-los no EXE  -->
+        <copy file="MySql.Data.binary" tofile="MySql.Data.dll" />
+        <copy file="Interop.SAPbouiCOM.binary" tofile="Interop.SAPbouiCOM.dll" />
+        <copy file="Interop.SAPbobsCOM.binary" tofile="Interop.SAPbobsCOM.dll" />
+
+        <!-- Gera o exe do Addon -->
+        <delete dir="${exeDirectory}" failonerror="false" />
+        <mkdir dir="${exeDirectory}"/>
+        <exec executable="${compiler}" failonerror="true">
+            <arg line="/target:winexe /out:${exeDirectory}/OsiAddon.exe ${references} ${resources} /recurse:*.cs " />
+        </exec>
+
+        <!-- Remove os arquivos de recursos criados no primeiro passo -->
+        <delete file="MySql.Data.dll" />
+        <delete file="Interop.SAPbouiCOM.dll" />
+        <delete file="Interop.SAPbobsCOM.dll" />
+
+        <!-- Cria a pasta de destino e copia os arquivos do Addon  -->
+        <delete dir="${addonDirectory}" failonerror="false" />
+        <mkdir dir="${addonDirectory}"/>
+        <mkdir dir="${addonDirectory}/Xml"/>
+        <copy todir="${addonDirectory}/Xml">
+            <fileset dir="Xml">
+                <include name="*.xml" />
+            </fileset>
+        </copy>
+        <copy todir="${addonDirectory}">
+            <fileset dir="${exeDirectory}">
+                <include name="OsiAddon.exe" />
+            </fileset>
+        </copy>
+    </target>
+</project>

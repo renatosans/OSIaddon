@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dataaccess>
+  <source name="MySQL 5.5">
+    <server>SRVSAP01</server>
+    <database>addonContratos</database>
+    <username>root</username>
+    <password>P@ssw0rd</password>
+  </source>
+  <source name="SQL Server 2008">
+    <server>SRVSAP01</server>
+    <database>SBO_DATACOPY</database>
+    <username>sapBusinessOne</username>
+    <password>P@ssw0rd</password>
+  </source>
+</dataaccess>
